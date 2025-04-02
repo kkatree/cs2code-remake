@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 263 59% 52%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-gradient-to-tr from-purple-900/40 to-purple-800/30 shadow-2xl rounded-xl border border-purple-600/30 backdrop-blur-sm transition-all duration-300 hover:shadow-purple-500/20 hover:border-purple-500/40;
+  }
+
+  .use-code-btn {
+    @apply rounded-lg relative inline-flex font-semibold overflow-hidden items-center justify-center px-4 py-2.5 m-1 cursor-pointer border-b-4 border-l shadow-xl active:border-purple-600 bg-gradient-to-tr from-purple-600 to-purple-500 border-purple-700 text-white w-48 transition-all duration-300 hover:shadow-purple-500/30 hover:scale-105;
+  }
+
+  .use-code-btn span.btn-highlight {
+    @apply absolute w-0 h-0 transition-all duration-500 ease-out bg-white blur-xl rounded-full opacity-20;
+  }
+
+  .use-code-btn:hover span.btn-highlight {
+    @apply w-40 h-40;
+  }
+
+  .article {
+    @apply max-w-4xl mx-auto px-4;
+    background: rgba(26, 26, 46, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    padding: 2rem;
+    border: 1px solid rgba(147, 51, 234, 0.2);
+  }
+
+  h1, h2, h3 {
+    @apply font-bold tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl text-purple-300;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl text-purple-200;
+  }
+
+  p {
+    @apply text-gray-300 leading-relaxed;
+  }
+
+  ul {
+    @apply space-y-2 text-gray-300;
+  }
+
+  li {
+    @apply flex items-center space-x-2;
+  }
+}
