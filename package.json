@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": "22.11.0"
+  },
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "@radix-ui/react-dialog": "^1.1.6",
