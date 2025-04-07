@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -18,19 +18,21 @@ interface News {
   views: number;
 }
 
-export default function NewsDetailPage({ params }: { params: { slug: string } }) {
+type PageProps = {
+  params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export default function NewsDetailPage({ params }: PageProps) {
   const [news, setNews] = useState<News | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchNews();
-  }, [params.slug]);
-
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     try {
+      const resolvedParams = await params;
       const response = await fetch("/api/news");
       const data = await response.json();
-      const newsItem = data.find((item: News) => item.slug === params.slug);
+      const newsItem = data.find((item: News) => item.slug === resolvedParams.slug);
       
       if (!newsItem) {
         throw new Error("Haber bulunamadı");
@@ -52,7 +54,11 @@ export default function NewsDetailPage({ params }: { params: { slug: string } })
     } finally {
       setLoading(false);
     }
-  };
+  }, [params]);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
 
   if (loading) {
     return (

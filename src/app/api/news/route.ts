@@ -2,10 +2,22 @@ import { NextResponse } from "next/server";
 import { writeFile, mkdir, readFile } from "fs/promises";
 import path from "path";
 
+interface News {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  content: string;
+  coverImage: string;
+  published: boolean;
+  createdAt: string;
+  views: number;
+}
+
 const NEWS_FILE_PATH = path.join(process.cwd(), "data", "news.json");
 
 // Haberleri dosyadan oku
-async function readNews() {
+async function readNews(): Promise<News[]> {
   try {
     const data = await readFile(NEWS_FILE_PATH, "utf-8");
     return JSON.parse(data);
@@ -15,7 +27,7 @@ async function readNews() {
 }
 
 // Haberleri dosyaya kaydet
-async function writeNews(news: any[]) {
+async function writeNews(news: News[]) {
   const dir = path.dirname(NEWS_FILE_PATH);
   await mkdir(dir, { recursive: true });
   await writeFile(NEWS_FILE_PATH, JSON.stringify(news, null, 2));

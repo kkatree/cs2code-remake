@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,19 +24,21 @@ interface News {
   views: number;
 }
 
-export default function EditNewsPage({ params }: { params: { id: string } }) {
+type PageProps = {
+  params: Promise<{ id: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export default function EditNewsPage({ params }: PageProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [news, setNews] = useState<News | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchNews();
-  }, [params.id]);
-
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     try {
-      const response = await fetch(`/api/news?id=${params.id}`);
+      const resolvedParams = await params;
+      const response = await fetch(`/api/news?id=${resolvedParams.id}`);
       const data = await response.json();
       setNews(data);
       setImagePreview(data.coverImage);
@@ -44,7 +46,11 @@ export default function EditNewsPage({ params }: { params: { id: string } }) {
       console.error("Haber getirilirken hata oluştu:", error);
       toast.error("Haber getirilirken bir hata oluştu");
     }
-  };
+  }, [params]);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,7 +58,8 @@ export default function EditNewsPage({ params }: { params: { id: string } }) {
 
     try {
       const formData = new FormData(e.currentTarget);
-      const response = await fetch(`/api/news?id=${params.id}`, {
+      const resolvedParams = await params;
+      const response = await fetch(`/api/news?id=${resolvedParams.id}`, {
         method: "PUT",
         body: formData,
       });
